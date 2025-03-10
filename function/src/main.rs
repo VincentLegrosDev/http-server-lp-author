@@ -4,6 +4,10 @@ enum Lang {
   Spanish,
   Chinese,
   Texan,
+  German,
+  Italian, 
+  French,
+  Japanese
 }
 
 struct Greeting {
@@ -16,6 +20,9 @@ fn main() -> Result<(), String> {
   println!("{}", greet(Lang::Texan)?);
   println!("{}", greet(Lang::Spanish)?);
   println!("{}", greet(Lang::Chinese)?);
+  println!("{}", greet(Lang::French)?); 
+  println!("{}", greet(Lang::German)?); 
+  println!("{}", greet(Lang::Japanese)?); 
   Ok(())
 }
 
@@ -29,6 +36,14 @@ fn greet (lang : Lang) -> Result<String, String> {
   let g : Greeting = Greeting { lang: Lang::Texan, message: String::from("Howdy WasmEdge!") };
   v.push(g);
   let g : Greeting = Greeting { lang: Lang::Chinese, message: String::from("WasmEdge 你好!") };
+  v.push(g);
+  let g : Greeting = Greeting { lang: Lang::German, message: String::from("guten tag WasmEdge") };
+  v.push(g);
+  let g : Greeting = Greeting { lang: Lang::Italian, message: String::from("Salve WasmEdge!") };
+  v.push(g);
+  let g : Greeting = Greeting { lang: Lang::French, message: String::from("Bonjour WasmEdge") };
+  v.push(g);
+  let g : Greeting = Greeting { lang: Lang::Japanese, message: String::from("こんにちは  WasmEdge!") };
   v.push(g);
 
   for e in v {
