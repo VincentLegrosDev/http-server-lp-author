@@ -3,6 +3,7 @@ use hyper::server::conn::Http;
 use hyper::service::service_fn;
 use hyper::{Body, Method, Request, Response, StatusCode};
 use tokio::net::TcpListener;
+use std::str;
 
 /// This is our service handler. It receives a Request, routes on its
 /// path, and returns a Future of a Response.
@@ -11,7 +12,20 @@ async fn handle_request(req: Request<Body>) -> Result<Response<Body>, hyper::Err
         // Serve some instructions at /
         (&Method::GET, "/") => Ok(Response::new(Body::from(
             "Try POSTing data to /echo such as: `curl localhost:8080/echo -XPOST -d 'hello world'`",
-        ))),
+        ))), 
+
+        (&Method::POST, "/parrot") => {
+          let data  =  hyper::body::to_bytes(req.into_body()).await?;  
+          let mut body = "You said: ".to_owned();  
+
+          match str::from_utf8(&data) {
+            Ok(message) => {
+                body.push_str(message); 
+                Ok(Response::new(Body::from(body)))
+            }, 
+            Err(_) => Ok(Response::new(Body::from("Error parsing string"))),
+          }
+        }, 
 
         // Simply echo the body back to the client.
         (&Method::POST, "/echo") => Ok(Response::new(req.into_body())),
